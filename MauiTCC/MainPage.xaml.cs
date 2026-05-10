@@ -1,5 +1,5 @@
-﻿namespace MauiTCC
-{
+﻿namespace MauiTCC;
+
     public partial class MainPage : ContentPage
     {
         int count = 0;
