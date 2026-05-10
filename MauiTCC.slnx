@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="MauiTCC/MauiTCC.csproj">
+    <Deploy Solution="Debug|*" />
+  </Project>
+</Solution>
