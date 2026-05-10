@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MauiTCC.CadastroPage"
+             Title="Novo Cadastro"
+             BackgroundColor="#F5F5F5">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="15" Padding="30">
+            <Label Text="Crie sua conta" FontSize="24" FontAttributes="Bold" TextColor="#2196F3" HorizontalOptions="Center" />
+        
+                <Entry x:Name="txtNome" Placeholder="Nome Completo" TextColor="Black" />
+            <Entry x:Name="txtCPF" Placeholder="CPF" Keyboard="Numeric" TextColor="Black" />
+            <Entry x:Name="txtTelefone" Placeholder="Telefone" Keyboard="Telephone" TextColor="Black" />
+            <Entry x:Name="txtConvenio" Placeholder="Convênio" TextColor="Black" />
+            <Entry x:Name="txtSenha" Placeholder="Senha" IsPassword="True" TextColor="Black" />
+
+            <Button Text="FINALIZAR CADASTRO" 
+            Clicked="OnFinalizarCadastroClicked" 
+            BackgroundColor="#2196F3" 
+            TextColor="White" />
+            </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

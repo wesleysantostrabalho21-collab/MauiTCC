@@ -2,9 +2,8 @@
 
 namespace MauiTCC.Models;
 
-public class Paciente
+public class Paciente : Usuario // Herança necessária para ter Nome e CPF
 {
-    [PrimaryKey]
-    public int IdUsuario { get; set; }
     public string Convenio { get; set; }
+    public string Telefone { get; set; } // Adicionado para bater com a tela
 }

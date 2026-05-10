@@ -19,9 +19,10 @@ public class DatabaseService
         _database = new SQLiteAsyncConnection(databasePath);
 
         // Criação automática de todas as tabelas baseadas no Diagrama de Classes
-        await _database.CreateTablesAsync(CreateFlags.None,
-            typeof(Usuario), typeof(Endereco), typeof(Paciente), typeof(Dentista),
-            typeof(Agendamento), typeof(Atendimento), typeof(Prontuario), typeof(Recepcionista), typeof(Financeiro), typeof(Consulta));
+        // Importante: CreateTablesAsync cria a tabela APENAS se ela não existir
+        await _database.CreateTablesAsync<Usuario, Endereco, Paciente, Dentista>();
+        await _database.CreateTablesAsync<Agendamento, Atendimento, Prontuario, Recepcionista>();
+        await _database.CreateTablesAsync<Financeiro, Consulta>();
     }
 
 
@@ -31,6 +32,14 @@ public class DatabaseService
         await Init();
         return await _database.InsertAsync(paciente);
     }
+
+    // --- TESTE VERIFICAÇÃO ---
+    public async Task<List<Paciente>> GetPacientesAsync()
+    {
+        await Init();
+        return await _database.Table<Paciente>().ToListAsync();
+    }
+    // ---------------------------------------------------------------
 
     // Lógica de Consulta de Agenda 
     public async Task<List<Agendamento>> GetAgendamentosAsync()
@@ -46,5 +55,16 @@ public class DatabaseService
         return await _database.Table<Prontuario>()
                              .Where(p => p.IdPaciente == idPaciente)
                              .FirstOrDefaultAsync();
+    }
+
+    public async Task<bool> ValidarLoginAsync(string cpf, string senha)
+    {
+        await Init();
+        // Procura um usuário que tenha o nome E a senha iguais aos digitados
+        var usuario = await _database.Table<Paciente>()
+                                     .Where(u => u.CPF == cpf && u.Senha == senha)
+                                     .FirstOrDefaultAsync();
+
+        return usuario != null; // Retorna true se achou, false se não achou
     }
 }

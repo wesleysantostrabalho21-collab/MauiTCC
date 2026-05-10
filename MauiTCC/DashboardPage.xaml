@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MauiTCC.DashboardPage"
+             Title="Menu Principal"
+             BackgroundColor="#F5F5F5">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="20">
+
+            <Label Text="Bem-vindo ao Sistema" 
+                   FontSize="22" 
+                   FontAttributes="Bold" 
+                   HorizontalOptions="Center" 
+                   TextColor="#2196F3" />
+
+            <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="15" RowSpacing="15">
+
+                <Frame Grid.Row="0" Grid.Column="0" CornerRadius="10" HasShadow="True" Padding="10">
+                    <VerticalStackLayout Spacing="5">
+                        <Button Text="AGENDA" BackgroundColor="#2196F3" HeightRequest="80" />
+                    </VerticalStackLayout>
+                </Frame>
+
+                <Frame Grid.Row="0" Grid.Column="1" CornerRadius="10" HasShadow="True" Padding="10">
+                    <VerticalStackLayout Spacing="5">
+                        <Button Text="PACIENTES" BackgroundColor="#2196F3" HeightRequest="80" />
+                    </VerticalStackLayout>
+                </Frame>
+
+                <Frame Grid.Row="1" Grid.Column="0" CornerRadius="10" HasShadow="True" Padding="10">
+                    <VerticalStackLayout Spacing="5">
+                        <Button Text="PRONTUÁRIO" BackgroundColor="#2196F3" HeightRequest="80" />
+                    </VerticalStackLayout>
+                </Frame>
+
+                <Frame Grid.Row="1" Grid.Column="1" CornerRadius="10" HasShadow="True" Padding="10">
+                    <VerticalStackLayout Spacing="5">
+                        <Button Text="SAIR" BackgroundColor="#F44336" HeightRequest="80" Clicked="OnSairClicked" />
+                    </VerticalStackLayout>
+                </Frame>
+
+            </Grid>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

@@ -1,6 +1,4 @@
-﻿using MauiTCC.Services;
-
-namespace MauiTCC;
+﻿namespace MauiTCC;
 
 public partial class App : Application
 {
@@ -8,16 +6,7 @@ public partial class App : Application
     {
         InitializeComponent();
 
-        MainPage = new AppShell();
-    }
-
-    private async void IniciarBanco()
-    {
-        var dbService = new MauiTCC.Services.DatabaseService();
-        // Isso apenas cria o arquivo .db3 e as tabelas
-        await dbService.GetAgendamentosAsync();
+        // Isso permite navegar da Login para o Cadastro com o botão voltar
+        MainPage = new NavigationPage(new MainPage());
     }
 }
-    
-     
-    
