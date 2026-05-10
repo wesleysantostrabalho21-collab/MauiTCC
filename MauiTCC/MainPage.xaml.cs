@@ -1,11 +1,8 @@
-﻿using MauiTCC.Services; // Adicione este using para enxergar o DatabaseService
-
-namespace MauiTCC;
-
-public partial class MainPage : ContentPage
+﻿namespace MauiTCC
 {
-    // 1. Declarar o serviço de banco de dados
-    private readonly DatabaseService _dbService;
+    public partial class MainPage : ContentPage
+    {
+        int count = 0;
 
     public MainPage()
     {
