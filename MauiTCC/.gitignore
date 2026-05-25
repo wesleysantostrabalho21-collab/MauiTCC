@@ -1,0 +1,10 @@
+﻿# Pastas de compilação locais
+bin/
+obj/
+
+# Banco de dados local (para não mandar o seu banco vazio ou com dados de teste)
+*.db3
+*.db3-journal
+
+# Arquivos do próprio Visual Studio
+.vs/
