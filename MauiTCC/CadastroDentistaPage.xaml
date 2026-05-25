@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MauiTCC.CadastroDentistaPage"
+             Title="Cadastrar Dentista"
+             BackgroundColor="#F5F5F5">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="15" Padding="30">
+            <Label Text="Novo Dentista" FontSize="24" FontAttributes="Bold" TextColor="#2196F3" HorizontalOptions="Center" />
+
+            <Entry x:Name="txtNome" Placeholder="Nome Completo" TextColor="Black" />
+            <Entry x:Name="txtCPF" Placeholder="CPF (apenas números)" Keyboard="Numeric" TextColor="Black" />
+            <Entry x:Name="txtSenha" Placeholder="Senha de Acesso" IsPassword="True" TextColor="Black" />
+
+            <Entry x:Name="txtCro" Placeholder="Número do CRO" TextColor="Black" />
+            <Entry x:Name="txtEspecialidade" Placeholder="Especialidade (ex: Ortodontia)" TextColor="Black" />
+
+            <Button Text="SALVAR DENTISTA" 
+                    Clicked="OnSalvarDentistaClicked" 
+                    BackgroundColor="#2196F3" 
+                    TextColor="White" 
+                    FontAttributes="Bold"
+                    Margin="0,10,0,0" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

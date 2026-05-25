@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MauiTCC.PainelPacientePage"
+             Title="Minhas Consultas"
+             BackgroundColor="#F5F5F5">
+
+    <VerticalStackLayout Padding="30" Spacing="20" VerticalOptions="Center">
+        <Label Text="Área do Paciente" FontSize="24" FontAttributes="Bold" TextColor="#2196F3" HorizontalOptions="Center"/>
+
+        <Frame CornerRadius="10" BackgroundColor="White" HasShadow="True" Padding="20">
+            <VerticalStackLayout Spacing="10">
+                <Label Text="Próxima Consulta Agendada:" FontAttributes="Bold" TextColor="Gray"/>
+                <Label Text="📅 Nenhuma consulta marcada para os próximos dias." TextColor="Black" FontSize="16"/>
+            </VerticalStackLayout>
+        </Frame>
+
+        <Button Text="SAIR DO APP" Clicked="OnSairClicked" BackgroundColor="#F44336" TextColor="White" FontAttributes="Bold" Margin="0,30,0,0"/>
+    </VerticalStackLayout>
+</ContentPage>
