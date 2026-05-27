@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="MauiTCC.ProntuarioClinicoPage"
+             Title="Prontuário Clínico Digital"
+             BackgroundColor="#F8F9FA">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+
+            <Frame BackgroundColor="#34495E" Padding="15" CornerRadius="8" HasShadow="False">
+                <VerticalStackLayout>
+                    <Label x:Name="lblNomePaciente" Text="Paciente: Carregando..." FontSize="18" FontAttributes="Bold" TextColor="White"/>
+                    <Label x:Name="lblInfoConsulta" Text="Consulta: --/-- às --:--" FontSize="13" TextColor="#ECF0F1" Margin="0,4,0,0"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <Label Text="Histórico de Tratamentos Recorrentes" FontSize="14" FontAttributes="Bold" TextColor="#2C3E50"/>
+            <Frame BackgroundColor="White" Padding="5" CornerRadius="6" BorderColor="#DCDCDC">
+                <Editor x:Name="txtHistorico" Placeholder="Ex: Canal no dente 14 iniciado em outra clínica, paciente relata sensibilidade térmica..." HeightRequest="100" AutoSize="TextChanges"/>
+            </Frame>
+
+            <Label Text="Procedimentos Realizados nesta Consulta" FontSize="14" FontAttributes="Bold" TextColor="#2C3E50"/>
+            <Frame BackgroundColor="White" Padding="5" CornerRadius="6" BorderColor="#DCDCDC">
+                <Editor x:Name="txtProcedimentos" Placeholder="Ex: Aplicação de flúor, profilaxia geral e restauração em resina fotopolimerizável no dente 22." HeightRequest="100" AutoSize="TextChanges"/>
+            </Frame>
+
+            <Label Text="Anexos Digitais &amp; Radiografias (Exames)" FontSize="14" FontAttributes="Bold" TextColor="#2C3E50"/>
+            <Frame BorderColor="#DCDCDC" BackgroundColor="White" CornerRadius="6" Padding="15">
+                <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
+                    <Button Text="SELECIONAR IMAGEM / RAIO-X" Clicked="OnAnexarDocumentoClicked" BackgroundColor="#27AE60" TextColor="White" FontAttributes="Bold" ImageSource="{FontImage Glyph='📁', Color=White, Size=16}"/>
+
+                    <Label x:Name="lblCaminhoArquivo" Text="Nenhum arquivo anexado." FontSize="11" TextColor="Gray" HorizontalTextAlignment="Center" LineBreakMode="TailTruncation"/>
+
+                    <Image x:Name="imgPreviewAnexo" HeightRequest="180" Aspect="AspectFit" IsVisible="False" HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <Button Text="SALVAR EVOLUÇÃO DO PRONTUÁRIO" Clicked="OnSalvarProntuarioClicked" BackgroundColor="#2980B9" TextColor="White" FontAttributes="Bold" HeightRequest="50" CornerRadius="8" Margin="0,15,0,0"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

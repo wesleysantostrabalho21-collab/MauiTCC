@@ -3,13 +3,14 @@ using SQLite;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq; // Adicionado para suportar o .Any() e .Where() na memória
 using System.Threading.Tasks;
 
 namespace MauiTCC.Services
 {
     public class DatabaseService
     {
-        // Conexão assíncrona para não travar a interface do celular (RNF01)
+        // Conexão assíncrona para não travar a interface do celular/computador (RNF01)
         private SQLiteAsyncConnection _database;
 
         private async Task Init()
@@ -17,7 +18,7 @@ namespace MauiTCC.Services
             if (_database is not null)
                 return;
 
-            // Define o caminho do banco de dados no dispositivo móvel
+            // Define o caminho do banco de dados no dispositivo
             var databasePath = Path.Combine(FileSystem.AppDataDirectory, "consultorio.db3");
 
             _database = new SQLiteAsyncConnection(databasePath);
@@ -38,7 +39,7 @@ namespace MauiTCC.Services
             return await _database.InsertAsync(paciente);
         }
 
-        // --- TESTE VERIFICAÇÃO ---
+        // Recupera a lista de todos os pacientes cadastrados
         public async Task<List<Paciente>> GetPacientesAsync()
         {
             await Init();
@@ -47,7 +48,7 @@ namespace MauiTCC.Services
 
         #endregion
 
-        #region LOGICA DE USUÁRIOS E CONTROLE DE ACESSO (NOVO)
+        #region LOGICA DE USUÁRIOS E CONTROLE DE ACESSO
 
         /// <summary>
         /// Insere um usuário comum no sistema (Administrador ou Recepcionista).
@@ -126,11 +127,104 @@ namespace MauiTCC.Services
 
         #region LOGICA DE AGENDAMENTOS E PRONTUÁRIOS
 
-        // Lógica de Consulta de Agenda 
+        // Salvar ou atualizar um agendamento (Resolve agendar e remarcar)
+        public async Task<int> SalvarAgendamentoAsync(Agendamento agendamento)
+        {
+            await Init();
+            if (agendamento.Id != 0)
+            {
+                return await _database.UpdateAsync(agendamento);
+            }
+            else
+            {
+                agendamento.Status = "Agendado";
+                return await _database.InsertAsync(agendamento);
+            }
+        }
+
+        // Deleta ou Cancela uma consulta (Para o botão cancelar)
+        public async Task<int> CancelarAgendamentoAsync(Agendamento agendamento)
+        {
+            await Init();
+            agendamento.Status = "Cancelado";
+            return await _database.UpdateAsync(agendamento);
+        }
+
+        // Lista TODOS os agendamentos ativos (Ignorando os cancelados)
         public async Task<List<Agendamento>> GetAgendamentosAsync()
         {
             await Init();
-            return await _database.Table<Agendamento>().ToListAsync();
+            return await _database.Table<Agendamento>()
+                                 .Where(a => a.Status != "Cancelado")
+                                 .ToListAsync();
+        }
+
+        // Filtra a agenda por um Dentista específico
+        public async Task<List<Agendamento>> GetAgendamentosPorDentistaAsync(int idDentista)
+        {
+            await Init();
+            return await _database.Table<Agendamento>()
+                                 .Where(a => a.IdDentista == idDentista && a.Status != "Cancelado")
+                                 .ToListAsync();
+        }
+
+        // 🌟 ATUALIZADO COM VERIFICAÇÃO ULTRA SEGURA (Evita falhas de tabelas diferentes)
+        public async Task<List<Agendamento>> GetAgendamentosPorPacienteAsync(int idPaciente, string nomePaciente)
+        {
+            await Init();
+
+            // 1. Busca todos os agendamentos ativos da tabela para filtrar em memória (onde métodos de string funcionam perfeitamente)
+            var todosAgendamentos = await _database.Table<Agendamento>()
+                                                   .Where(a => a.Status != "Cancelado")
+                                                   .ToListAsync();
+
+            // 2. Compara pelo ID do Paciente ou se os nomes batem de alguma forma (ignorando maiúsculas/minúsculas)
+            return todosAgendamentos.Where(a =>
+                a.IdPaciente == idPaciente ||
+                (!string.IsNullOrEmpty(a.NomePaciente) &&
+                 (a.NomePaciente.Equals(nomePaciente, StringComparison.OrdinalIgnoreCase) ||
+                  nomePaciente.Contains(a.NomePaciente, StringComparison.OrdinalIgnoreCase)))
+            ).ToList();
+        }
+
+        // Filtra a agenda por uma Data específica
+        public async Task<List<Agendamento>> GetAgendamentosPorDataAsync(DateTime data)
+        {
+            await Init();
+
+            var dataDesejada = data.Date;
+            var todos = await _database.Table<Agendamento>()
+                                       .Where(a => a.Status != "Cancelado")
+                                       .ToListAsync();
+
+            return todos.Where(a => a.Data.Date == dataDesejada).ToList();
+        }
+
+        // Regra de Negócio (RNF): Verifica se o dentista ou a sala já estão ocupados naquele mesmo dia e horário
+        public async Task<bool> VerificarDisponibilidadeAsync(DateTime data, string horario, string sala, int idDentista, int idAgendamentoAtual = 0)
+        {
+            await Init();
+            var todos = await _database.Table<Agendamento>()
+                                       .Where(a => a.Status != "Cancelado")
+                                       .ToListAsync();
+
+            bool conflito = todos.Any(a =>
+                a.Id != idAgendamentoAtual &&
+                a.Data.Date == data.Date &&
+                a.Horario == horario &&
+                (a.IdDentista == idDentista || a.SalaCadeira == sala)
+            );
+
+            return !conflito; // Retorna TRUE se estiver livre e FALSE se estiver ocupado
+        }
+
+        // Método auxiliar para carregar a lista de Dentistas nos Pickers da tela
+        public async Task<List<Usuario>> GetTodosDentistasAsync()
+        {
+            await Init();
+            return await _database.Table<Usuario>()
+                                 .Where(u => u.Tipo == "Dentista")
+                                 .ToListAsync();
         }
 
         // Lógica para buscar um prontuário específico
@@ -140,6 +234,21 @@ namespace MauiTCC.Services
             return await _database.Table<Prontuario>()
                                  .Where(p => p.IdPaciente == idPaciente)
                                  .FirstOrDefaultAsync();
+        }
+        public async Task<int> SalvarProntuarioAsync(Prontuario prontuario)
+        {
+            await Init();
+
+            // Se o IdProntuario for diferente de 0, significa que o registro já existe, então atualiza
+            if (prontuario.IdProntuario != 0)
+            {
+                return await _database.UpdateAsync(prontuario);
+            }
+            // Caso contrário, é um prontuário novo sendo gerado para o paciente
+            else
+            {
+                return await _database.InsertAsync(prontuario);
+            }
         }
 
         #endregion

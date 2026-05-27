@@ -7,23 +7,14 @@ using MauiTCC.Services;
 
 namespace MauiTCC
 {
-    public partial class DashboardPage : ContentPage
+    public partial class AgendaDashboardPage : ContentPage
     {
         private readonly DatabaseService _dbService;
-        private readonly Usuario _usuarioAtual;
 
-        // 🌟 ATUALIZADO: Agora o construtor aceita opcionalmente o usuário logado
-        public DashboardPage(Usuario usuarioLogado = null)
+        public AgendaDashboardPage()
         {
             InitializeComponent();
             _dbService = new DatabaseService();
-            _usuarioAtual = usuarioLogado;
-
-            // 🌟 Regra de Negócio: Se quem logou for Administrador, exibe o menu superior secreto
-            if (_usuarioAtual != null && _usuarioAtual.Tipo == "Administrador")
-            {
-                menuAdmin.IsVisible = true;
-            }
         }
 
         protected override async void OnAppearing()
@@ -45,12 +36,14 @@ namespace MauiTCC
             }
         }
 
+        
         private async void OnDataSelecionadaChanged(object sender, DateChangedEventArgs e)
         {
             try
             {
-                // Tratando para garantir o tipo DateTime comum esperado pelo banco
-                DateTime dataFiltrada = (DateTime)e.NewDate;
+              
+                DateTime dataFiltrada = e.NewDate.HasValue ? e.NewDate.Value.Date : DateTime.Today;
+
                 var filtrados = await _dbService.GetAgendamentosPorDataAsync(dataFiltrada);
                 collAgendamentos.ItemsSource = filtrados;
             }
@@ -93,32 +86,6 @@ namespace MauiTCC
             var agendamentoSelecionado = (Agendamento)btn.CommandParameter;
 
             await Navigation.PushAsync(new AgendarConsultaPage(agendamentoSelecionado));
-        }
-
-        // 🌟 NOVO: Ações disparadas pelos botões do Menu do Administrador (.xaml)
-
-        private async void OnMenuNovoPacienteClicked(object sender, EventArgs e)
-        {
-            // Redireciona para a sua página de cadastro geral existente
-            await Navigation.PushAsync(new CadastroPage());
-        }
-
-        private async void OnMenuNovoProfissionalClicked(object sender, EventArgs e)
-        {
-            // Redireciona para a sua página de cadastro geral existente
-            await Navigation.PushAsync(new CadastroDentistaPage());
-        }
-
-        private async void OnMenuFinanceiroClicked(object sender, EventArgs e)
-        {
-            // Feedback visual provisório para o módulo de fluxo de caixa
-            await DisplayAlert("Módulo Financeiro", "Funcionalidade de fluxo de caixa em desenvolvimento para o TCC.", "OK");
-        }
-
-        private async void OnMenuAgendarConsultaClicked(object sender, EventArgs e)
-        {
-            // 📅 Abre a tela de agendamento usando a estrutura que você criou
-            await Navigation.PushAsync(new AgendarConsultaPage());
         }
     }
 }

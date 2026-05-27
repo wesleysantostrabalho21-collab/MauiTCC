@@ -3,18 +3,60 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MauiTCC.PainelPacientePage"
              Title="Minhas Consultas"
-             BackgroundColor="#F5F5F5">
+             BackgroundColor="#F3F3F3">
 
-    <VerticalStackLayout Padding="30" Spacing="20" VerticalOptions="Center">
-        <Label Text="Área do Paciente" FontSize="24" FontAttributes="Bold" TextColor="#2196F3" HorizontalOptions="Center"/>
+    <Grid RowDefinitions="Auto, *">
 
-        <Frame CornerRadius="10" BackgroundColor="White" HasShadow="True" Padding="20">
-            <VerticalStackLayout Spacing="10">
-                <Label Text="Próxima Consulta Agendada:" FontAttributes="Bold" TextColor="Gray"/>
-                <Label Text="📅 Nenhuma consulta marcada para os próximos dias." TextColor="Black" FontSize="16"/>
-            </VerticalStackLayout>
+        <Frame Grid.Row="0" BackgroundColor="#007BFF" CornerRadius="0" Padding="15">
+            <Label x:Name="lblBoasVindas" 
+                   Text="Bem-vindo ao seu Painel" 
+                   TextColor="White" 
+                   FontSize="18" 
+                   FontAttributes="Bold" 
+                   HorizontalOptions="Center"/>
         </Frame>
 
-        <Button Text="SAIR DO APP" Clicked="OnSairClicked" BackgroundColor="#F44336" TextColor="White" FontAttributes="Bold" Margin="0,30,0,0"/>
-    </VerticalStackLayout>
+        <ScrollView Grid.Row="1" Margin="15">
+            <CollectionView x:Name="collMinhasConsultas" 
+                            EmptyView="Você não possui nenhuma consulta agendada.">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame BackgroundColor="White" 
+                               CornerRadius="10" 
+                               Margin="0,0,0,10" 
+                               Padding="15"
+                               HasShadow="True">
+
+                            <StackLayout Spacing="5">
+                                <Label Text="{Binding NomeDentista, StringFormat='Dentista: {0}'}" 
+                                       FontSize="16" 
+                                       FontAttributes="Bold" 
+                                       TextColor="#1F1F1F"/>
+
+                                <StackLayout Orientation="Horizontal" Spacing="15">
+                                    <Label Text="{Binding Data, StringFormat='Data: {0:dd/MM/yyyy}'}" 
+                                           FontSize="13" 
+                                           TextColor="#555555"/>
+                                    <Label Text="{Binding Horario, StringFormat='Horário: {0}'}" 
+                                           FontSize="13" 
+                                           TextColor="#555555"/>
+                                </StackLayout>
+
+                                <Label Text="{Binding SalaCadeira, StringFormat='Local: {0}'}" 
+                                       FontSize="13" 
+                                       TextColor="#777777"/>
+
+                                <Label Text="{Binding Status, StringFormat='Status: {0}'}" 
+                                       FontSize="12" 
+                                       FontAttributes="Italic" 
+                                       TextColor="Green"/>
+                            </StackLayout>
+
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </ScrollView>
+
+    </Grid>
 </ContentPage>

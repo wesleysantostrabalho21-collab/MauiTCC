@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             x:Class="MauiTCC.AgendarConsultaPage"
+             Title="Agendar Nova Consulta"
+             BackgroundColor="#F5F5F5">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="15" Padding="30">
+            <Label Text="Marcar Consulta Odontológica" FontSize="22" FontAttributes="Bold" TextColor="#2196F3" HorizontalOptions="Center" Margin="0,0,0,10"/>
+
+            <Label Text="Selecione o Paciente:" TextColor="#333333" FontAttributes="Bold"/>
+            <Picker x:Name="pckPaciente" 
+                    Title="Escolha o paciente" 
+                    ItemDisplayBinding="{Binding Nome}" 
+                    TextColor="Black" 
+                    TitleColor="Gray"
+                    BackgroundColor="#EAEAEA"/>
+
+            <Label Text="Selecione o Profissional:" TextColor="#333333" FontAttributes="Bold"/>
+            <Picker x:Name="pckDentista" 
+                    Title="Escolha o dentista" 
+                    ItemDisplayBinding="{Binding Nome}" 
+                    TextColor="Black" 
+                    TitleColor="Gray"
+                    BackgroundColor="#EAEAEA"/>
+
+            <Label Text="Sala / Consultório:" TextColor="#333333" FontAttributes="Bold"/>
+            <Picker x:Name="pckSala" 
+                    Title="Selecione o local de atendimento" 
+                    TextColor="Black" 
+                    TitleColor="Gray"
+                    BackgroundColor="#EAEAEA">
+                <Picker.Items>
+                    <x:String>Consultório Principal A</x:String>
+                    <x:String>Consultório Infantil B</x:String>
+                    <x:String>Sala de Cirurgia 01</x:String>
+                </Picker.Items>
+            </Picker>
+
+            <Label Text="Selecione a Data:" TextColor="#333333" FontAttributes="Bold"/>
+            <DatePicker x:Name="dtpData" Format="dd/MM/yyyy"/>
+
+            <Label Text="Selecione o Horário disponível:" TextColor="#333333" FontAttributes="Bold"/>
+            <Picker x:Name="pckHorario" 
+                    Title="Escolha o horário" 
+                    TextColor="Black" 
+                    TitleColor="Gray"
+                    BackgroundColor="#EAEAEA">
+                <Picker.Items>
+                    <x:String>08:00</x:String>
+                    <x:String>09:00</x:String>
+                    <x:String>10:00</x:String>
+                    <x:String>11:00</x:String>
+                    <x:String>13:30</x:String>
+                    <x:String>14:30</x:String>
+                    <x:String>15:30</x:String>
+                    <x:String>16:30</x:String>
+                </Picker.Items>
+            </Picker>
+
+            <Button x:Name="btnFinalizar"
+                    Text="CONFIRMAR AGENDAMENTO" 
+                    Clicked="OnConfirmarAgendamentoClicked" 
+                    BackgroundColor="#2196F3" 
+                    TextColor="White" 
+                    FontAttributes="Bold"
+                    Margin="0,20,0,0" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

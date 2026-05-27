@@ -1,12 +1,53 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-            
-             Title="DentistaDashboardPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="MauiTCC.DentistaDashboardPage"
+             Title="Painel do Dentista"
+             BackgroundColor="#F4F6F9">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+
+            <Frame BackgroundColor="#2C3E50" CornerRadius="10" HasShadow="True" Padding="15">
+                <VerticalStackLayout>
+                    <Label x:Name="lblBoasVindasDentista" Text="Olá, Dr(a)!" FontSize="20" FontAttributes="Bold" TextColor="White"/>
+                    <Label Text="Abaixo estão suas consultas agendadas. Clique em uma delas para abrir o Prontuário Clínico." FontSize="12" TextColor="#BDC3C7" Margin="0,5,0,0"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <Label Text="Sua Agenda de Consultas" FontSize="18" FontAttributes="Bold" TextColor="#2C3E50"/>
+
+            <CollectionView x:Name="collConsultasDentista" SelectionMode="Single" SelectionChanged="OnConsultaSelecionada">
+                <CollectionView.EmptyView>
+                    <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Padding="30">
+                        <Label Text="Dr., você não tem nenhuma consulta agendada no momento." FontSize="14" TextColor="Gray" HorizontalTextAlignment="Center"/>
+                    </VerticalStackLayout>
+                </CollectionView.EmptyView>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="0,5">
+                            <Frame BackgroundColor="White" BorderColor="#DCDCDC" CornerRadius="8" HasShadow="False" Padding="15">
+                                <HorizontalStackLayout Spacing="15" VerticalOptions="Center">
+                                    <BoxView WidthRequest="5" BackgroundColor="#3498DB" CornerRadius="2" VerticalOptions="FillAndExpand"/>
+
+                                    <VerticalStackLayout VerticalOptions="Center">
+                                        <Label Text="{Binding NomePaciente}" FontSize="16" FontAttributes="Bold" TextColor="#333333"/>
+                                        <HorizontalStackLayout Spacing="10" Margin="0,3,0,0">
+                                            <Label Text="{Binding Data, StringFormat='{0:dd/MM/yyyy}'}" FontSize="13" TextColor="#7F8C8D"/>
+                                            <Label Text="•" FontSize="13" TextColor="#7F8C8D"/>
+                                            <Label Text="{Binding Horario}" FontSize="13" FontAttributes="Bold" TextColor="#E67E22"/>
+                                            <Label Text="•" FontSize="13" TextColor="#7F8C8D"/>
+                                            <Label Text="{Binding SalaCadeira}" FontSize="13" TextColor="#7F8C8D"/>
+                                        </HorizontalStackLayout>
+                                    </VerticalStackLayout>
+                                </HorizontalStackLayout>
+                            </Frame>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

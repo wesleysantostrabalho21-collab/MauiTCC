@@ -1,67 +1,153 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              x:Class="MauiTCC.DashboardPage"
-             Title="Menu Principal"
-             BackgroundColor="#F5F5F5">
+             Title="Agenda do Consultório"
+             BackgroundColor="#F3F3F3">
 
-    <ScrollView>
-        <VerticalStackLayout Spacing="20" Padding="20">
+    <Grid RowDefinitions="Auto, Auto, *">
 
-            <Label Text="Painel Administrativo" 
-                   FontSize="22" 
-                   FontAttributes="Bold" 
-                   HorizontalOptions="Center" 
-                   TextColor="#2196F3" />
+        <Frame x:Name="menuAdmin"
+               Grid.Row="0"
+               BackgroundColor="#1F1F1F"
+               CornerRadius="0"
+               Padding="10"
+               Margin="0,0,0,5"
+               IsVisible="False">
 
-            <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto" ColumnSpacing="15" RowSpacing="15">
+            <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Spacing="15">
+                <Label Text="PAINEL DO ADM:" 
+                       TextColor="#FFD700" 
+                       FontAttributes="Bold" 
+                       VerticalOptions="Center" 
+                       Margin="0,0,10,0"/>
 
-                <Frame Grid.Row="0" Grid.Column="0" CornerRadius="10" HasShadow="True" Padding="10">
-                    <VerticalStackLayout Spacing="5">
-                        <Button Text="AGENDA" BackgroundColor="#2196F3" HeightRequest="80" FontAttributes="Bold" />
-                    </VerticalStackLayout>
-                </Frame>
+                <Button Text="📅 Agendar Consulta" 
+                        BackgroundColor="#007BFF" 
+                        TextColor="White" 
+                        HeightRequest="38"
+                        FontAttributes="Bold"
+                        Clicked="OnMenuAgendarConsultaClicked"/>
 
-                <Frame Grid.Row="0" Grid.Column="1" CornerRadius="10" HasShadow="True" Padding="10">
-                    <VerticalStackLayout Spacing="5">
-                        <Button Text="PACIENTES" BackgroundColor="#2196F3" HeightRequest="80" FontAttributes="Bold" />
-                    </VerticalStackLayout>
-                </Frame>
+                <Button Text="+ Novo Paciente" 
+                        BackgroundColor="#28A745" 
+                        TextColor="White" 
+                        HeightRequest="38"
+                        Clicked="OnMenuNovoPacienteClicked"/>
 
-                <Frame Grid.Row="1" Grid.Column="0" CornerRadius="10" HasShadow="True" Padding="10">
-                    <VerticalStackLayout Spacing="5">
-                        <Button Text="+ DENTISTA" 
-                                Clicked="OnCadastrarDentistaClicked" 
-                                BackgroundColor="#4CAF50" 
-                                HeightRequest="80" 
-                                FontAttributes="Bold" />
-                    </VerticalStackLayout>
-                </Frame>
+                <Button Text="+ Novo Profissional" 
+                        BackgroundColor="#007BFF" 
+                        TextColor="White" 
+                        HeightRequest="38"
+                        Clicked="OnMenuNovoProfissionalClicked"/>
 
-                <Frame Grid.Row="1" Grid.Column="1" CornerRadius="10" HasShadow="True" Padding="10">
-                    <VerticalStackLayout Spacing="5">
-                        <Button Text="+ EQUIPE" 
-                                Clicked="OnCadastrarUsuarioClicked" 
-                                BackgroundColor="#4CAF50" 
-                                HeightRequest="80" 
-                                FontAttributes="Bold" />
-                    </VerticalStackLayout>
-                </Frame>
+                <Button Text="📊 Financeiro" 
+                        BackgroundColor="#17A2B8" 
+                        TextColor="White" 
+                        HeightRequest="38"
+                        Clicked="OnMenuFinanceiroClicked"/>
+            </StackLayout>
+        </Frame>
 
-                <Frame Grid.Row="2" Grid.Column="0" CornerRadius="10" HasShadow="True" Padding="10">
-                    <VerticalStackLayout Spacing="5">
-                        <Button Text="PRONTUÁRIO" BackgroundColor="#2196F3" HeightRequest="80" FontAttributes="Bold" />
-                    </VerticalStackLayout>
-                </Frame>
+        <Frame Grid.Row="1" 
+               BackgroundColor="#D3D3D3" 
+               CornerRadius="8" 
+               Margin="15" 
+               Padding="15">
 
-                <Frame Grid.Row="2" Grid.Column="1" CornerRadius="10" HasShadow="True" Padding="10">
-                    <VerticalStackLayout Spacing="5">
-                        <Button Text="SAIR" BackgroundColor="#F44336" HeightRequest="80" FontAttributes="Bold" Clicked="OnSairClicked" />
-                    </VerticalStackLayout>
-                </Frame>
+            <StackLayout Orientation="Horizontal" 
+                         HorizontalOptions="Center" 
+                         Spacing="20">
 
-            </Grid>
+                <Label Text="Filtrar Dia:" 
+                       VerticalOptions="Center" 
+                       FontAttributes="Bold" 
+                       TextColor="#333333"/>
 
-        </VerticalStackLayout>
-    </ScrollView>
+                <DatePicker x:Name="dtpData"
+                            Format="dd/MM/yyyy"
+                            VerticalOptions="Center"
+                            DateSelected="OnDataSelecionadaChanged"/>
+
+                <Button Text="Limpar Filtro"
+                        BackgroundColor="#5A738E"
+                        TextColor="White"
+                        CornerRadius="5"
+                        Clicked="OnLimparFiltrosClicked"/>
+            </StackLayout>
+        </Frame>
+
+        <ScrollView Grid.Row="2" Margin="15,0,15,15">
+            <CollectionView x:Name="collAgendamentos" 
+                            EmptyView="Nenhuma consulta agendada para este dia.">
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame BackgroundColor="White" 
+                               CornerRadius="10" 
+                               Margin="0,0,0,10" 
+                               Padding="15"
+                               HasShadow="True">
+
+                            <Grid ColumnDefinitions="*, Auto">
+
+                                <StackLayout Grid.Column="0" Spacing="5">
+                                    <Label Text="{Binding NomePaciente}" 
+                                           FontSize="18" 
+                                           FontAttributes="Bold" 
+                                           TextColor="#1F1F1F"/>
+
+                                    <Label Text="{Binding NomeDentista, StringFormat='Dentista: {0}'}" 
+                                           FontSize="14" 
+                                           TextColor="#555555"/>
+
+                                    <StackLayout Orientation="Horizontal" Spacing="15">
+                                        <Label Text="{Binding Data, StringFormat='{0:dd/MM/yyyy}'}" 
+                                               FontSize="13" 
+                                               TextColor="#777777"/>
+                                        <Label Text="{Binding Horario, StringFormat='Horário: {0}'}" 
+                                               FontSize="13" 
+                                               TextColor="#777777"/>
+                                        <Label Text="{Binding SalaCadeira, StringFormat='Sala: {0}'}" 
+                                               FontSize="13" 
+                                               TextColor="#777777"/>
+                                    </StackLayout>
+
+                                    <Label Text="{Binding Status}" 
+                                           FontSize="12" 
+                                           FontAttributes="Italic" 
+                                           TextColor="Green"/>
+                                </StackLayout>
+
+                                <StackLayout Grid.Column="1" 
+                                             Orientation="Horizontal" 
+                                             Spacing="10" 
+                                             VerticalOptions="Center">
+
+                                    <Button Text="Remarcar" 
+                                            BackgroundColor="#F0AD4E" 
+                                            TextColor="White"
+                                            CornerRadius="5"
+                                            CommandParameter="{Binding .}"
+                                            Clicked="OnRemarcarClicked"/>
+
+                                    <Button Text="Cancelar" 
+                                            BackgroundColor="#D9534F" 
+                                            TextColor="White"
+                                            CornerRadius="5"
+                                            CommandParameter="{Binding .}"
+                                            Clicked="OnCancelarClicked"/>
+                                </StackLayout>
+
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+
+            </CollectionView>
+        </ScrollView>
+
+    </Grid>
+
 </ContentPage>
