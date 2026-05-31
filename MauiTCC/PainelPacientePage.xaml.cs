@@ -33,7 +33,7 @@ namespace MauiTCC
         {
             try
             {
-                // 🌟 ATUALIZADO: Passando Id e Nome para buscar de forma segura e cruzar os dados
+                
                 var meusAgendamentos = await _dbService.GetAgendamentosPorPacienteAsync(_idPacienteLogado, _nomePacienteLogado);
                 collMinhasConsultas.ItemsSource = meusAgendamentos;
             }

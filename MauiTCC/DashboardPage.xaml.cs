@@ -12,14 +12,14 @@ namespace MauiTCC
         private readonly DatabaseService _dbService;
         private readonly Usuario _usuarioAtual;
 
-        // 🌟 ATUALIZADO: Agora o construtor aceita opcionalmente o usuário logado
+       
         public DashboardPage(Usuario usuarioLogado = null)
         {
             InitializeComponent();
             _dbService = new DatabaseService();
             _usuarioAtual = usuarioLogado;
 
-            // 🌟 Regra de Negócio: Se quem logou for Administrador, exibe o menu superior secreto
+            
             if (_usuarioAtual != null && _usuarioAtual.Tipo == "Administrador")
             {
                 menuAdmin.IsVisible = true;
@@ -95,7 +95,7 @@ namespace MauiTCC
             await Navigation.PushAsync(new AgendarConsultaPage(agendamentoSelecionado));
         }
 
-        // 🌟 NOVO: Ações disparadas pelos botões do Menu do Administrador (.xaml)
+        
 
         private async void OnMenuNovoPacienteClicked(object sender, EventArgs e)
         {
@@ -117,7 +117,7 @@ namespace MauiTCC
 
         private async void OnMenuAgendarConsultaClicked(object sender, EventArgs e)
         {
-            // 📅 Abre a tela de agendamento usando a estrutura que você criou
+           
             await Navigation.PushAsync(new AgendarConsultaPage());
         }
     }

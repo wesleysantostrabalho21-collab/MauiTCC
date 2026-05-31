@@ -48,13 +48,13 @@ namespace MauiTCC
                     {
                         case "Administrador":
                             await DisplayAlert("Acesso Autorizado", $"Bem-vindo, Administrador: {usuarioLogado.Nome}", "OK");
-                            // ALTERADO: Agora redireciona o Administrador para o Menu Principal!
+                        
                             await Navigation.PushAsync(new DashboardPage(usuarioLogado));
                             break;
 
                         case "Dentista":
                             await DisplayAlert("Acesso Autorizado", $"Olá, Dr(a). {usuarioLogado.Nome}", "OK");
-                            // 🌟 ALTERADO: Passa o usuário logado para o Dashboard do médico saber quem ele é!
+                            
                             await Navigation.PushAsync(new DentistaDashboardPage(usuarioLogado));
                             break;
 

@@ -18,7 +18,7 @@ namespace MauiTCC
             _dbService = new DatabaseService();
             _consultaAtual = consulta;
 
-            // Alimenta a interface visual com as informações da consulta
+          
             lblNomePaciente.Text = $"Paciente: {consulta.NomePaciente}";
             lblInfoConsulta.Text = $"Consulta em: {consulta.Data:dd/MM/yyyy} às {consulta.Horario} - {consulta.SalaCadeira}";
         }
@@ -33,12 +33,12 @@ namespace MauiTCC
         {
             try
             {
-                // Busca se o paciente já possui algum prontuário salvo no banco
+               
                 _prontuarioPaciente = await _dbService.GetProntuarioAsync(_consultaAtual.IdPaciente);
 
                 if (_prontuarioPaciente != null)
                 {
-                    // Se já existir, preenche os campos com o histórico antigo
+                    
                     txtHistorico.Text = _prontuarioPaciente.HistoricoTratamentos;
                     txtProcedimentos.Text = _prontuarioPaciente.ProcedimentosRealizados;
                     _caminhoArquivoSelecionado = _prontuarioPaciente.CaminhoAnexoDocumento;
@@ -47,7 +47,7 @@ namespace MauiTCC
                     {
                         lblCaminhoArquivo.Text = $"Arquivo: {Path.GetFileName(_caminhoArquivoSelecionado)}";
 
-                        // Se o anexo for uma imagem válida, exibe o preview na tela
+
                         imgPreviewAnexo.Source = ImageSource.FromFile(_caminhoArquivoSelecionado);
                         imgPreviewAnexo.IsVisible = true;
                     }
@@ -59,12 +59,12 @@ namespace MauiTCC
             }
         }
 
-        // 🌟 LÓGICA DO FILE PICKER (ARMAZENAMENTO DE EXAMES/RADIOGRAFIAS)
+    
         private async void OnAnexarDocumentoClicked(object sender, EventArgs e)
         {
             try
             {
-                // Opções para aceitar apenas imagens (raio-x, fotos da boca, etc)
+               
                 var opcoesFiltro = new PickOptions
                 {
                     PickerTitle = "Selecione a Radiografia/Exame do Paciente",
@@ -79,7 +79,7 @@ namespace MauiTCC
                     _caminhoArquivoSelecionado = resultadoArquivo.FullPath;
                     lblCaminhoArquivo.Text = $"Anexo: {resultadoArquivo.FileName}";
 
-                    // Exibe a imagem selecionada no componente de preview
+                    
                     imgPreviewAnexo.Source = ImageSource.FromFile(_caminhoArquivoSelecionado);
                     imgPreviewAnexo.IsVisible = true;
                 }
@@ -94,7 +94,7 @@ namespace MauiTCC
         {
             try
             {
-                // Se for o primeiro atendimento do paciente, criamos a instância do objeto
+                
                 if (_prontuarioPaciente == null)
                 {
                     _prontuarioPaciente = new Prontuario
@@ -102,7 +102,7 @@ namespace MauiTCC
                         IdPaciente = _consultaAtual.IdPaciente,
                         NomePaciente = _consultaAtual.NomePaciente,
 
-                        // 🌟 SOLUÇÃO DO ERRO: Preenchendo os campos obrigatórios do banco
+                        
                         DataAbertura = DateTime.Now,
                         StatusGeral = "Ativo" // Define um status padrão para não ir nulo
                     };
